@@ -4,8 +4,11 @@
 </h2>
 
 ![Swift4](https://img.shields.io/badge/swift-4-blue.svg)
+![Swift5](https://img.shields.io/badge/swift-5-blue.svg)
 ![tuxOS](https://img.shields.io/badge/os-Bionic-green.svg?style=flat)
 ![ARM](https://img.shields.io/badge/cpu-ARMv8-red.svg?style=flat)
+
+2019-05-11: There is now a great fork of this: [SwiftCrossCompilers](https://github.com/CSCIX65G/SwiftCrossCompilers) which provides ready-made toolchains. Highly recommended!
 
 End of April 2017
 [Johannes Weiß](https://github.com/weissi)
