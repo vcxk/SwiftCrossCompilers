@@ -168,11 +168,7 @@ GNU_EXTENSION=`cat $CONFIG | jq -jc '.gnuExtension' | sed s/\"/\'/g`
 
 TC_TARGET="${TARGET_ARCH}-linux-gnu${GNU_EXTENSION}"
 
-if [ "${GNU_EXTENSION}" != "" ]; then
-    SPM_TARGET="${TARGET_ARCH}-unknown-linux-gnu${GNU_EXTENSION}"
-else
-    SPM_TARGET="${TARGET_ARCH}-unknown-linux"
-fi
+SPM_TARGET="${TARGET_ARCH}-unknown-linux-gnu${GNU_EXTENSION}"
 echo "SPM Target = $SPM_TARGET"
 
 TOOLCHAIN_NAME=${ARCH_NAME}-${VERSION_NUMBER}-${TOOLCHAIN_SUFFIX}
