@@ -93,11 +93,7 @@ function download_with_cache() {
 function unpack_deb() {
     local tmp
     tmp=$(mktemp -d /tmp/.unpack_deb_XXXXXX)
-    (
-    cd "$tmp"
-    ar -x "$2"
-    tar -C "$1" -xf data.tar.*
-    )
+    ( cd "$tmp"; ar -x "$2"; tar -C "$1" -xf data.tar.* )
     rm -rf "$tmp"
 }
 
@@ -105,14 +101,8 @@ function unpack_deb() {
 function unpack_pkg() {
     local tmp
     tmp=$(mktemp -d /tmp/.unpack_pkg_XXXXXX)
-    (
-    cd "$tmp"
-    xar -xf "$2"
-    )
-    (
-    cd "$1"
-    cat "$tmp"/*.pkg/Payload | gunzip -dc | cpio -i
-    )
+    ( cd "$tmp"; xar -xf "$2" )
+    ( cd "$1"; cat "$tmp"/*.pkg/Payload | gunzip -dc | cpio -i )
     rm -rf "$tmp"
 }
 
@@ -536,7 +526,3 @@ echo " - SDK: $INSTALLER_DIR/SDKs/$linux_sdk_name"
 echo " - Toolchain: $INSTALLER_DIR/Toolchains/$xc_tc_name"
 echo " - Runtime Libraries: $INSTALLER_DIR/Runtimes/${runtime_name}"
 echo " - SwiftPM destination.json: $INSTALLER_DIR/Destinations/$destination_name"
-
-
-
-
