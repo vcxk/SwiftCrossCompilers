@@ -7,7 +7,7 @@
 # Swift5 adaptation by Van Simmons
 #
 #
-# The idea is to use Ubuntu 18.04 as a standard cross compile target for amd64, arm64 and arm32
+# The idea is to use Ubuntu 18.04 as a standard cross compile target for amd64 and arm64
 # (and any other 18.04-supported architecture) and then to set up
 # docker containers on those architectures to host lldb and the shlibs required to run swift programs.
 # This will enable swift containers to run on other OSes which are docker-capable (including Windows). 
@@ -16,7 +16,7 @@
 function usage() {
     echo >&2 "Usage: $0 NAME_OF_CONFIGURATION_FILE_TO_USE"
     echo >&2
-    echo >&2 "Example: $0 arm64-5.0"
+    echo >&2 "Example: $0 Configurations/5.3.3-RELEASE/arm64.json"
     echo >&2
 }
 
@@ -127,7 +127,7 @@ function contains() {
 
 set -eu
 
-export PATH="/bin:/usr/bin:/usr/local/bin"
+export PATH="$PATH"
 
 if [[ $# -ne 1 ]]; then
     usage
@@ -144,7 +144,7 @@ echo Using Configuration: $CONFIG
 TOOLCHAIN_SUFFIX=`cat $CONFIG | jq -jc '.toolchainSuffix' | sed s/\"//g`
 
 # version and architecture variables
-#VERSION_NUMBER=5.0
+#VERSION_NUMBER=5.3.3
 VERSION_NUMBER=`cat $CONFIG | jq -jc '.version' | sed s/\"//g`
 
 #ARCH_NAME=arm64/amd64/armhf
@@ -156,9 +156,9 @@ TARGET_ARCH=`cat $CONFIG | jq -jc '.targetArch' | sed s/\"//g`
 #GNU_EXTENSION=''/''/eabihf
 GNU_EXTENSION=`cat $CONFIG | jq -jc '.gnuExtension' | sed s/\"/\'/g`
 
-TC_TARGET="${TARGET_ARCH}-linux-gnu${GNU_EXTENSION}"
+TC_TARGET="${TARGET_ARCH}-unknown-linux${GNU_EXTENSION}"
 
-SPM_TARGET="${TARGET_ARCH}-unknown-linux-gnu${GNU_EXTENSION}"
+SPM_TARGET="${TARGET_ARCH}-unknown-linux${GNU_EXTENSION}"
 echo "SPM Target = $SPM_TARGET"
 
 TOOLCHAIN_NAME=${ARCH_NAME}-${VERSION_NUMBER}-${TOOLCHAIN_SUFFIX}
@@ -445,7 +445,9 @@ cat > "$cross_destination_basename/$destination_name" <<EOF
     ],
     "extra-swiftc-flags": [
         "-target", "${SPM_TARGET}",
-        "-use-ld=gold", "-tools-directory", "$cross_tc_basename/$xc_tc_name/usr/bin"
+        "-use-ld=gold", 
+        "-sdk", "${cross_sdk_basename}/${linux_sdk_name}",
+        "-tools-directory", "${cross_tc_basename}/${xc_tc_name}/usr/bin"
     ],
     "extra-cpp-flags": [
         "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${TARGET_ARCH}-linux-gnu${GNU_EXTENSION}",
@@ -473,9 +475,10 @@ rm -rf $cross_runtime_basename/$ARCH_NAME-$VERSION_NUMBER
 cd $BASEDIR
 (
 	cd helloworld
-	echo "Testing helloworld with $cross_tc_basename/$xc_tc_name/usr/bin/swift"
+	echo "Testing helloworld"
 	rm -rf .build Package.resolved
-	$cross_tc_basename/$xc_tc_name/usr/bin/swift build \
+	echo "swift build --destination $cross_destination_basename/$destination_name"
+	swift build \
 		--destination $cross_destination_basename/$destination_name || true
 	if [[ ! -f ".build/$SPM_TARGET/debug/helloworld" ]]; then
 		rm -rf .build
@@ -489,9 +492,9 @@ cd $BASEDIR
 
 (
 	cd echoserver
-	echo "Testing echoserver with $cross_tc_basename/$xc_tc_name/usr/bin/swift"
+	echo "Testing echoserver"
 	rm -rf .build Package.resolved
-	$cross_tc_basename/$xc_tc_name/usr/bin/swift build \
+	swift build \
 		--destination $cross_destination_basename/$destination_name || true
 	if [[ ! -f ".build/$SPM_TARGET/debug/echoserver" ]]; then
 		rm -rf .build
