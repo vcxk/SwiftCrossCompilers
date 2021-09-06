@@ -433,11 +433,14 @@ echo "    SDK is valid"
 echo "Fixing module map"
 fix_glibc_modulemap "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux/${TARGET_ARCH}/glibc.modulemap"
 
+echo "Move modulemaps to correct location"
+mv ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux/*.swiftmodule ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux/${TARGET_ARCH}
+
 # special case handling for armv6
 if [ "${TARGET_ARCH}" == "armv6" ]; then
 	(
-	pushd ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux; ln -s ./armv6 armv7; popd
-	pushd ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/linux; ln -s ./armv6 armv7; popd
+           pushd ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux; ln -s ./armv6 armv7; popd
+           pushd ${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/linux; ln -s ./armv6 armv7; popd
 	)
 fi 
 

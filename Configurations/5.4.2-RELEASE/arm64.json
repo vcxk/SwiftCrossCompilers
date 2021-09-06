@@ -3,7 +3,7 @@
     "version": "5.4.2",
     "toolchainSuffix": "RELEASE",
     "targetArch": "aarch64",
-    "gnuExtension": "",
+    "gnuExtension": "-gnu",
     "installerDir": "./InstallPackagers/SwiftCrossCompiler/Developer",
     "cachePath": "/tmp",
     "macToolchain": "https://swift.org/builds/swift-5.4.2-release/xcode/swift-5.4.2-RELEASE/swift-5.4.2-RELEASE-osx.pkg",
