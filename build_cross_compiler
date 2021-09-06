@@ -80,7 +80,9 @@ function download_stdout() {
 
 # url, key
 function download_with_cache() {
-    mkdir -p "$dest/cache_${ARCH_NAME}"
+    if [[ ! -f "$dest/cache_${ARCH_NAME}" ]]; then
+	mkdir -p "$dest/cache_${ARCH_NAME}"
+    fi
     local out
     out="$dest/cache_${ARCH_NAME}/$2"
     if [[ ! -f "$out" ]]; then
@@ -279,6 +281,7 @@ for distro_name in "${distros[@]}"; do
 	done < <(download_stdout "$distro_name" | gunzip -d -c | grep ^Filename:)
 done
 
+echo "Construct missing packages"
 missing_packages=()
 for i in "${pkg_names[@]}"; do
     skip=
@@ -327,6 +330,9 @@ cd "$tmp"
 echo "  unpack binutils.tar.gz"     
 tar -xf "$binutils_pkg"
 cd binutils-*
+# It is stupid to have to do this...
+# https://forum.fobby.net/index.php?t=msg&goto=6448&
+rm intl/VERSION
 
 cp $BASEDIR/gold-threads.patch $tmp
 
