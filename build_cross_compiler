@@ -159,7 +159,9 @@ TARGET_ARCH=`cat $CONFIG | jq -jc '.targetArch' | sed s/\"//g`
 GNU_EXTENSION=`cat $CONFIG | jq -jc '.gnuExtension' | sed s/\"/\'/g`
 
 TC_TARGET="${TARGET_ARCH}-unknown-linux${GNU_EXTENSION}"
-
+echo "Toolchain Target = $TC_TARGET"
+DESTINATION_TARGET="${TARGET_ARCH}-linux${GNU_EXTENSION}"
+echo "Destination Target = $DESTINATION_TARGET"
 SPM_TARGET="${TARGET_ARCH}-unknown-linux${GNU_EXTENSION}"
 echo "SPM Target = $SPM_TARGET"
 
@@ -456,19 +458,22 @@ cat > "$cross_destination_basename/$destination_name" <<EOF
     "target": "${SPM_TARGET}",
     "dynamic-library-extension": "so",
     "extra-cc-flags": [
-        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${TARGET_ARCH}-linux-gnu${GNU_EXTENSION}",
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${DESTINATION_TARGET}",
         "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include",
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/c++/7",
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${DESTINATION_TARGET}/c++/7",
         "-fPIC"
     ],
     "extra-swiftc-flags": [
         "-target", "${SPM_TARGET}",
         "-use-ld=gold", 
         "-sdk", "${cross_sdk_basename}/${linux_sdk_name}",
-        "-tools-directory", "${cross_tc_basename}/${xc_tc_name}/usr/bin"
+        "-tools-directory", "${cross_tc_basename}/${xc_tc_name}/usr/bin",
+	"-L", "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/gcc/${DESTINATION_TARGET}/7"
     ],
     "extra-cpp-flags": [
-        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${TARGET_ARCH}-linux-gnu${GNU_EXTENSION}",
-        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include"
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/c++/7",
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${DESTINATION_TARGET}/c++/7"
     ]
 }
 EOF
@@ -495,11 +500,10 @@ cd $BASEDIR
 	echo "Testing helloworld"
 	rm -rf .build Package.resolved
 	echo "swift build --destination $cross_destination_basename/$destination_name"
-	swift build \
-		--destination $cross_destination_basename/$destination_name || true
+	swift build --destination $cross_destination_basename/$destination_name || true
 	if [[ ! -f ".build/$SPM_TARGET/debug/helloworld" ]]; then
 		rm -rf .build
-    	echo Test build of helloworld for $SPM_TARGET failed
+    	        echo Test build of helloworld for $SPM_TARGET failed
 		exit 79
 	fi
 	echo "Verifying helloworld build output:"
@@ -511,8 +515,8 @@ cd $BASEDIR
 	cd echoserver
 	echo "Testing echoserver"
 	rm -rf .build Package.resolved
-	swift build \
-		--destination $cross_destination_basename/$destination_name || true
+	echo "swift build --destination $cross_destination_basename/$destination_name"
+	swift build --destination $cross_destination_basename/$destination_name || true
 	if [[ ! -f ".build/$SPM_TARGET/debug/echoserver" ]]; then
 		rm -rf .build
 	    echo Test build of echoserver for $SPM_TARGET failed
