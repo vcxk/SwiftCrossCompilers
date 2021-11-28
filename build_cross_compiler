@@ -446,6 +446,8 @@ if [ "${TARGET_ARCH}" == "armv6" ]; then
 	)
 fi 
 
+echo "Copy linux platform support"
+rsync -a "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/linux" "${cross_tc_basename}/${xc_tc_name}/usr/lib/swift"
 
 # --- Generate the destination specification  --------------------------------
 echo "Generate ${ARCH_NAME} destination descriptor"
