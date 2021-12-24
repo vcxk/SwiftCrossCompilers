@@ -471,11 +471,12 @@ cat > "$cross_destination_basename/$destination_name" <<EOF
         "-use-ld=gold", 
         "-sdk", "${cross_sdk_basename}/${linux_sdk_name}",
         "-tools-directory", "${cross_tc_basename}/${xc_tc_name}/usr/bin",
-	"-L", "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/gcc/${DESTINATION_TARGET}/7"
+	    "-L", "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/gcc/${DESTINATION_TARGET}/7"
     ],
     "extra-cpp-flags": [
         "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/c++/7",
-        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${DESTINATION_TARGET}/c++/7"
+        "-I", "${cross_sdk_basename}/${linux_sdk_name}/usr/include/${DESTINATION_TARGET}/c++/7",
+        "-lstdc++"
     ]
 }
 EOF
