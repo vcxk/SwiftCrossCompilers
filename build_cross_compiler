@@ -415,9 +415,13 @@ fi
 rm -rf "${cross_sdk_basename}/${linux_sdk_name}/usr/share/doc"
 rm -rf "$tmp"
 
-# add missing symlink
+# add missing symlinks
 if [ ! -L ${xc_tc_name}/usr/bin/swift-autolink-extract ]; then
 	ln -s swift ${xc_tc_name}/usr/bin/swift-autolink-extract
+fi
+
+if [ ! -L ${xc_tc_name}/usr/bin/ld ]; then
+	ln -s ld.gold ${xc_tc_name}/usr/bin/ld
 fi
 )
 
