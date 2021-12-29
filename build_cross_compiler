@@ -395,6 +395,7 @@ if [ "$subdir" == "usr" ]; then
 	echo "    working in top level directory"
 
 	rsync -a "$tmp/usr/lib/swift/linux"        "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/usr/lib/swift/pm"           "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
 	rsync -a "$tmp/usr/lib/swift_static/linux" "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/"
 
 	rsync -a "$tmp/usr/lib/swift/dispatch"     "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
@@ -405,6 +406,7 @@ else
 	echo "    working in subdir = ${subdir}"
 
 	rsync -a "$tmp/${subdir}/usr/lib/swift/linux"        "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/${subdir}/usr/lib/swift/pm"           "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
 	rsync -a "$tmp/${subdir}/usr/lib/swift_static/linux" "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/"
 
 	rsync -a "$tmp/${subdir}/usr/lib/swift/dispatch"     "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
