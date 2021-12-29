@@ -395,21 +395,27 @@ if [ "$subdir" == "usr" ]; then
 	echo "    working in top level directory"
 
 	rsync -a "$tmp/usr/lib/swift/linux"        "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/usr/lib/swift/pm"           "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/usr/lib/"lib*.so*              "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/"
 	rsync -a "$tmp/usr/lib/swift_static/linux" "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/"
 
 	rsync -a "$tmp/usr/lib/swift/dispatch"     "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 	rsync -a "$tmp/usr/lib/swift/os"           "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 	rsync -a "$tmp/usr/lib/swift/CoreFoundation" "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
+	rsync -a "$tmp/usr/include/SourceKit"      "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 else
 	# Apple-distributed amd64 toolchains put an extra directory layer in the .tar.gz file.  Handle here
 	echo "    working in subdir = ${subdir}"
 
 	rsync -a "$tmp/${subdir}/usr/lib/swift/linux"        "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/${subdir}/usr/lib/swift/pm"           "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift/"
+	rsync -a "$tmp/${subdir}/usr/lib/"lib*.so*              "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/"
 	rsync -a "$tmp/${subdir}/usr/lib/swift_static/linux" "${cross_sdk_basename}/${linux_sdk_name}/usr/lib/swift_static/"
 
 	rsync -a "$tmp/${subdir}/usr/lib/swift/dispatch"     "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 	rsync -a "$tmp/${subdir}/usr/lib/swift/os"           "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 	rsync -a "$tmp/${subdir}/usr/lib/swift/CoreFoundation" "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
+	rsync -a "$tmp/${subdir}/usr/include/SourceKit"      "${cross_sdk_basename}/${linux_sdk_name}/usr/include/"
 fi
 
 rm -rf "${cross_sdk_basename}/${linux_sdk_name}/usr/share/doc"
