@@ -12,12 +12,14 @@ let package = Package(
         .watchOS(.v7)
     ],
     dependencies: [
-        .package(url: "git@github.com:apple/swift-nio.git", .upToNextMajor(from: "2.26.0"))
+        .package(url: "git@github.com:apple/swift-nio.git",  .upToNextMajor(from: "2.36.0")),
+        .package(url: "git@github.com:adam-fowler/mqtt-nio", .upToNextMajor(from: "2.5.2")),
     ],
     targets: [
         .target(
             name: "echoserver",
             dependencies: [
+                .product(name: "MQTTNIO", package: "mqtt-nio"),
                 .product(name: "NIO", package: "swift-nio"),
                 .product(name: "NIOConcurrencyHelpers", package: "swift-nio")
             ]
