@@ -12,8 +12,8 @@ let package = Package(
         .watchOS(.v7)
     ],
     dependencies: [
-        .package(url: "git@github.com:apple/swift-nio.git",  .upToNextMajor(from: "2.36.0")),
-        .package(url: "git@github.com:adam-fowler/mqtt-nio", .upToNextMajor(from: "2.5.2")),
+        .package(url: "https://github.com/apple/swift-nio.git",  .upToNextMajor(from: "2.36.0")),
+        .package(url: "https://github.com/adam-fowler/mqtt-nio", .upToNextMajor(from: "2.5.2")),
     ],
     targets: [
         .target(
