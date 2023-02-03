@@ -1,6 +1,6 @@
 {
   "archName": "amd64",
-  "version": "5.6.3",
+  "version": "5.7.1",
   "toolchainSuffix": "RELEASE",
   "targetArch": "x86_64",
   "gnuExtension": "-gnu",
